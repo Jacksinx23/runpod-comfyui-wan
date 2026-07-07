@@ -16,6 +16,11 @@ RUN git clone https://github.com/facefusion/facefusion.git --branch 3.1.1 .
 RUN pip3 install --upgrade pip && \
     python3 install.py --onnxruntime cuda --skip-conda
 
+# Deps que o install.py nao puxou + garante onnxruntime-gpu
+RUN pip3 install charset-normalizer requests && \
+    pip3 uninstall -y onnxruntime || true
+RUN pip3 install onnxruntime-gpu
+
 # Baixa os modelos (face_swapper + face_enhancer + detectores) na imagem
 RUN python3 facefusion.py force-download
 
