@@ -23,6 +23,7 @@ def handler(event):
     enhancer_model = inp.get("face_enhancer_model", "gfpgan_1.4")
     enhancer_blend = int(inp.get("face_enhancer_blend", 80))   # 0-100
     swapper_model = inp.get("face_swapper_model", "inswapper_128_fp16")
+    pixel_boost = inp.get("face_swapper_pixel_boost", "1024x1024")  # 128x128 / 512x512 / 1024x1024
 
     work = tempfile.mkdtemp(prefix="ff_")
     src = os.path.join(work, "src.png")
@@ -42,6 +43,7 @@ def handler(event):
         "--output-path", out,
         "--processors", "face_swapper", "face_enhancer",
         "--face-swapper-model", swapper_model,
+        "--face-swapper-pixel-boost", pixel_boost,
         "--face-enhancer-model", enhancer_model,
         "--face-enhancer-blend", str(enhancer_blend),
         "--execution-providers", "cuda",
