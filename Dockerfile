@@ -1,13 +1,18 @@
 FROM runpod/worker-comfyui:5.8.6-base
 
-# Custom Scripts (LoadImageFromURL)
+# Custom Scripts
 RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git && \
     cd ComfyUI-Custom-Scripts && pip install -r requirements.txt 2>/dev/null || true
 
-# KJNodes (QwenImageTextEncode e outros nodes Qwen)
+# KJNodes (QwenImageTextEncode)
 RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
     cd ComfyUI-KJNodes && pip install -r requirements.txt 2>/dev/null || true
+
+# ComfyUI-Impact-Pack (LoadImageFromURL)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
+    cd ComfyUI-Impact-Pack && pip install -r requirements.txt 2>/dev/null || true
 
 COPY extra_model_paths.yaml /comfyui/extra_model_paths.yaml
