@@ -15,5 +15,10 @@ RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && \
     cd ComfyUI-Impact-Pack && pip install -r requirements.txt 2>/dev/null || true
 
+# WanVideoWrapper (nodes Qwen Image Edit)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git && \
+    cd ComfyUI-WanVideoWrapper && pip install -r requirements.txt 2>/dev/null || true
+
 COPY load_image_from_url.py /comfyui/custom_nodes/load_image_from_url.py
 COPY extra_model_paths.yaml /comfyui/extra_model_paths.yaml
