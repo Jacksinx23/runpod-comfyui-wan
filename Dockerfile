@@ -19,5 +19,6 @@ RUN cd /comfyui/custom_nodes && \
 RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/Comfy-Org/ComfyUI_Comfy_Qwen.git 2>/dev/null || true
 
+COPY qwen_image_text_encode.py /comfyui/custom_nodes/qwen_image_text_encode.py
 COPY load_image_from_url.py /comfyui/custom_nodes/load_image_from_url.py
 COPY extra_model_paths.yaml /comfyui/extra_model_paths.yaml
