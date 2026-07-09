@@ -5,7 +5,7 @@ class QwenImageTextEncode:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "conditioning": ("CONDITIONING",),
+                "text": ("STRING", {"multiline": True}),
                 "clip": ("CLIP",),
             },
             "optional": {
@@ -17,30 +17,13 @@ class QwenImageTextEncode:
     FUNCTION = "encode"
     CATEGORY = "conditioning"
 
-    def encode(self, conditioning, clip, image=None):
-        # Se não tem imagem, retorna o conditioning original
-        if image is None:
-            return (conditioning,)
-
-        # Tenta usar o clip para encodar com a imagem
-        try:
-            tokens = clip.tokenize("")
-            if hasattr(clip, 'encode_from_tokens_scheduled'):
-                cond, pooled = clip.encode_from_tokens_scheduled(tokens)
-            else:
-                cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
-
-            # Injeta a imagem no conditioning
-            result = []
-            for c in conditioning:
-                n = [c[0], c[1].copy() if isinstance(c[1], dict) else {}]
-                if image is not None:
-                    n[1]["reference_image"] = image
-                result.append(n)
-            return (result,)
-        except Exception:
-            return (conditioning,)
-
+    def encode(self, text, clip, image=None):
+        tokens = clip.tokenize(text)
+        cond, pooled = clip.encode_from_tokens(tokens, return_pooled=True)
+        result = [[cond, {"pooled_output": pooled}]]
+        if image is not None:
+            result[0][1]["reference_image"] = image
+        return (result,)
 
 NODE_CLASS_MAPPINGS = {
     "QwenImageTextEncode": QwenImageTextEncode
